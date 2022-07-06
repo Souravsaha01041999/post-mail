@@ -1,0 +1,177 @@
+<html>
+    <head>
+        <title>post-mail</title>
+        <link rel="stylesheet" href="https://souravsaha1234.000webhostapp.com/removeadd/removeadd.css">
+        <link rel="icon" href="../icon_for.jpg">
+        <script src="./comoncode/blockcode.js"></script>
+        <script src="./comoncode/progress.js"></script>
+        <link rel="stylesheet" href="./comoncode/progress.css">
+        <link rel="stylesheet" href="./comoncode/alertstyle.css">
+        <script src="./comoncode/alertstyle.js"></script>
+        <style>
+            .header
+            {
+                position:fixed;
+                width: 100%;
+                height: 300px;
+                background-color: #ff7701;
+                border-bottom-left-radius: 200px;
+            }
+            .loginstyle
+            {
+                position: relative;
+                color: white;
+                font-size: 100px;
+                top: 40%;
+                left: 80%;
+            }
+            .container
+            {
+                position:absolute;
+                top: 42%;
+                left: 38%;
+                width: max-content;
+            }
+            input
+            {
+                width: 300px;
+                background-color:#7dcaff;
+                font-size: 15px;
+                border: solid;
+                border-color: #ca2121;
+                padding: 10px;
+                border-radius: 20px;
+            }
+            .btn
+            {
+                position: relative;
+                background-color: #ff7701;
+                left: 18%;
+                font-size: 20px;
+                border-color: #ff7701;
+                color: white;
+                padding: 10px;
+                border-radius: 20px;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <!--PROGRESS-->
+        <div id="progress">
+            <font id="title"></font>
+            <img src="./comoncode/loading_icon.png" id="imgicon" style="position: relative; top: 70px;" width="40" height="40">
+            <font id="mytext"></font>
+        </div>
+        <!--END PROGRESS-->
+        <!--ALERT-->
+        <div id="alertStyle">
+            <font id="text" style="font-size: 20px; color: red;"></font>
+        </div>
+        <!--END ALEERT-->
+        <div class="header">
+            <font class="loginstyle">Signup</font>
+        </div>
+        <div class="container">
+            <input type="text" placeholder="Email Id" id="emailId">
+            <br><br>
+            <input type="text" placeholder="User Id" id="userId">
+            <br><br>
+            <input type="password" id="pass1" placeholder="Password">
+            <br><br>
+            <input type="password" placeholder="Re-enter Password" id="pass2">
+            <br><br>
+            <button class="btn" onclick="sendotp()">SEND OTP IN MAIL</button>
+            <br>
+            <br>
+            <input type="number" id="otp" placeholder="OTP" style="width: 100px;position: relative; left: 37%;">
+            <br><br>
+            <button class="btn" style="left: 35%;" onclick="signupapi()">SIGNUP</button>
+        </div>
+        <script>
+            var otp;
+            function sendotp()
+            {
+                var email=String(document.getElementById("emailId").value);
+                var userid=String(document.getElementById("userId").value);
+                var pass1=String(document.getElementById("pass1").value);
+                var pass2=String(document.getElementById("pass2").value);
+                if(email.length>0&&userid.length>0&&pass1.length>0&&pass2.length>0)
+                {
+                    setProgress("Sending","Please Wait...");
+                    if(pass1==pass2)
+                    {
+                        otp=String(new Date().getMinutes())+String(new Date().getSeconds());
+                        var http=new XMLHttpRequest();
+                        http.onreadystatechange=function()
+                        {
+                            if(this.status==200&&this.readyState==4)
+                            {
+                                setAlert("OTP Sended");
+                                stopProgress();
+                                
+                            }
+                            else if(this.status==0&&this.readyState==4)
+                            {
+                                setAlert("ERROR");
+                                stopProgress();
+                            }
+                        };
+                
+                        http.open("POST", "https://souravsaha1234.000webhostapp.com/post-mail/signup_otp.php", true);
+                        http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                        http.send("rcvdata="+otp+"&email="+email);
+                    }
+                    else{
+                        setAlert("Enter Same Password");
+                        stopProgress();
+                    }
+                }
+                else{
+                    setAlert("Enter All Data");
+                }
+            }
+            function signupapi()
+            {
+                var userid=String(document.getElementById("userId").value);
+                var otpdata=String(document.getElementById("otp").value);
+                var pass1=String(document.getElementById("pass1").value);
+                var email=String(document.getElementById("emailId").value);
+                if(otpdata==otp)
+                {
+                    setProgress("Sending","Please Wait...");
+                    var http=new XMLHttpRequest();
+                        http.onreadystatechange=function()
+                        {
+                            if(this.status==200&&this.readyState==4)
+                            {
+                                var res=String(this.responseText).trim();
+                                if(res=="1")
+                                {
+                                    setAlert("User Already Exist");
+                                    stopProgress();
+                                }
+                                else if(res=="2")
+                                {
+                                    setAlert("Done");
+                                    stopProgress();
+                                }
+                            }
+                            else if(this.status==0&&this.readyState==4)
+                            {
+                                setAlert("ERROR");
+                                stopProgress();
+                            }
+                        };
+                
+                        http.open("POST", "https://souravsaha1234.000webhostapp.com/post-mail/signup.php", true);
+                        http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                        http.send("uid="+userid+"&password="+pass1+"&mail="+email);
+                }
+                else{
+                    setAlert("OTP wrong");
+                }
+            }
+        </script>
+    </body>
+</html>

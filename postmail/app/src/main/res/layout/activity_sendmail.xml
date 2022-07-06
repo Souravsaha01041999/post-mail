@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".sendmail">
+
+
+        <RelativeLayout
+            android:id="@+id/holdcam"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imgset"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/camera_icon" />
+
+            <ImageView
+                android:id="@+id/showimg"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                />
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_toLeftOf="@+id/showimg"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="25dp"
+                android:id="@+id/download_img"
+                android:background="@drawable/download_icon"
+                />
+
+        </RelativeLayout>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="To:"
+        android:layout_below="@+id/holdcam"
+        android:id="@+id/sendmailto"
+        android:background="@drawable/sendmailstyle"
+        android:paddingLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:singleLine="true"
+        />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Subject"
+        android:layout_below="@+id/sendmailto"
+        android:id="@+id/sendmailsubject"
+        android:background="@drawable/sendmailstyle"
+        android:paddingLeft="10dp"
+        android:layout_marginTop="10dp"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/sendmailsend"
+        android:layout_alignParentBottom="true"
+        android:text="SEND"
+        android:background="@color/colorPrimary"
+        android:layout_marginBottom="20dp"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+
+        />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/sendmailsubject"
+        android:layout_above="@+id/sendmailsend"
+        android:id="@+id/sendmailbody"
+        android:background="@drawable/sendmailstyle"
+        android:hint="Body"
+        android:paddingLeft="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="10dp"
+        />
+</RelativeLayout>

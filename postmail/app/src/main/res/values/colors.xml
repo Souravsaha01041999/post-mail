@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#FF7700</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="black">#000000</color>
+    <color name="mailmain">#ECDFAA</color>
+    <color name="orange">#FF7700</color>
+    <color name="white">#FFFFFF</color>
+    <color name="comontextcolor">#7CCAFF</color>
+    <color name="comontextcolorborder">#FF0000</color>
+    <color name="listcolor">#F0E7DD</color>
+    <color name="green">#DD278300</color>
+</resources>

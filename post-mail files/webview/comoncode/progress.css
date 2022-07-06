@@ -1,0 +1,29 @@
+#progress
+{
+    visibility:hidden;
+    position: absolute;
+    background-color: white;
+    border: solid;
+    border-color: #706c6c;
+    top: 40%;
+    left: 35%;
+    width: 350px;
+    height: 150px;
+    box-shadow: 5px 10px #706c6c;
+    border-radius: 5px;
+    z-index: 6;
+}
+#title
+{
+    position: relative;
+    left: 10px;
+    top: 10px;
+    font-size: 20px;
+}
+#mytext
+{
+    position: relative;
+    font-size: 15px;
+    left: 20px;
+    top: 30px;
+}

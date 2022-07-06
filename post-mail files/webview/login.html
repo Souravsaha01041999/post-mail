@@ -1,0 +1,205 @@
+<html>
+    <head>
+        <title>post-mail</title>
+        <link rel="icon" href="../icon_for.jpg">
+        <link rel="stylesheet" href="https://souravsaha1234.000webhostapp.com/removeadd/removeadd.css">
+        <link rel="icon" href="../icon_for.jpg">
+        <script src="./comoncode/blockcode.js"></script>
+        <script src="./comoncode/progress.js"></script>
+        <link rel="stylesheet" href="./comoncode/progress.css">
+        <link rel="stylesheet" href="./comoncode/alertstyle.css">
+        <script src="./comoncode/alertstyle.js"></script>
+
+        <style>
+            .header
+            {
+                position:fixed;
+                width: 100%;
+                height: 300px;
+                background-color: #ff7701;
+                border-bottom-left-radius: 200px;
+            }
+            .loginstyle
+            {
+                position: relative;
+                color: white;
+                font-size: 100px;
+                top: 40%;
+                left: 80%;
+            }
+            .container
+            {
+                position:absolute;
+                top: 50%;
+                left: 38%;
+                width: max-content;
+            }
+            input
+            {
+                width: 300px;
+                background-color:#7dcaff;
+                font-size: 25px;
+                border: solid;
+                border-color: #ca2121;
+                padding: 10px;
+                border-radius: 20px;
+            }
+            .fp
+            {
+                color: black;
+                position: relative;
+                left: 60%;
+                cursor: pointer;
+            }
+            .loginbutton
+            {
+                position: relative;
+                background-color: #ff7701;
+                left: 37%;
+                font-size: 20px;
+                border-color: #ff7701;
+                color: white;
+                padding: 10px;
+                border-radius: 20px;
+                cursor: pointer;
+            }
+            .footer
+            {
+                position: fixed;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                background-color: white;
+                color: black;
+                text-align: center;
+                font-size: 25px;
+            }
+        </style>
+    </head>
+    <body>
+        <!--PROGRESS-->
+        <div id="progress">
+            <font id="title"></font>
+            <img src="./comoncode/loading_icon.png" id="imgicon" style="position: relative; top: 70px;" width="40" height="40">
+            <font id="mytext"></font>
+        </div>
+        <!--END PROGRESS-->
+        <!--ALERT-->
+        <div id="alertStyle">
+            <font id="text" style="font-size: 20px; color: red;"></font>
+        </div>
+        <!--END ALEERT-->
+
+        <div class="header">
+            <font class="loginstyle">Login</font>
+        </div>
+        <div class="container">
+            <input type="text" placeholder="User Id" id="userid">
+            <br><br>
+            <input type="password" id="pass" placeholder="Password">
+            <br><br>
+            <font class="fp" onclick="forgatepass()">forgate Password?</font>     <!--CLICK EVENT FOR GET PASSWORD-->
+            <br><br>
+            <button class="loginbutton" onclick="loginapi()">LOGIN</button>
+        </div>
+        <div class="footer">
+            <font style="position: relative;cursor: pointer; bottom: 20px;" onclick="createaccount()">Don't have an account? Register here</font>   <!--CLICK EVENT WILL ADD HERE-->
+        </div>
+        <script>
+            function loginapi()
+            {
+                //CALL LIGIN API
+                var uid=String(document.getElementById("userid").value);
+                var pass=String(document.getElementById("pass").value);
+                if(uid.length>0&&pass.length>0)
+                {
+                    setProgress("Login","Please Wait...");
+                    var http=new XMLHttpRequest();
+                    http.onreadystatechange=function()
+                    {
+                        if(this.status==200&&this.readyState==4)
+                        {
+                            var res=String(this.responseText).trim();
+                            stopProgress();
+                            if(res=="Success")
+                            {
+                                //GO TO HOME PAGE AND STORE USER ID IN COOK
+                                var d=new Date();
+                                d.setTime(d.getTime()+(24*60*60*1000));
+                                document.cookie="post-mail-userid="+uid+"; expires="+d.toGMTString()+"; path=/";
+                                window.location.href="./home.html";
+                            }
+                            else if(res=="Error Password"){
+                                document.getElementById("pass").value="";
+                                setAlert(this.responseText);
+                            }
+                            else{
+                                setAlert(this.responseText);
+                                document.getElementById("pass").value="";
+                                document.getElementById("userid").value="";
+                            }
+                        }
+                        else if(this.status==0&&this.readyState==4)
+                        {
+                            setAlert("ERROR");
+                            stopProgress();
+                        }
+                    };
+                
+                    http.open("POST", "https://souravsaha1234.000webhostapp.com/post-mail/login.php", true);
+                    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                    http.send("uid="+uid+"&pass="+pass);
+                }
+                else{
+                    setAlert("Enter All Data");
+                }
+                
+            }
+
+            function forgatepass()
+            {
+                //FORGATE PASSWORD
+                var uid=String(document.getElementById("userid").value);
+                
+                if(uid.length>0)
+                {
+                    setProgress("Sending","Please Wait...");
+                    var http=new XMLHttpRequest();
+                    http.onreadystatechange=function()
+                    {
+                        if(this.status==200&&this.readyState==4)
+                        {
+                            
+                            setAlert(this.responseText);
+                            if(this.responseText=="user not found")
+                            {
+                                document.getElementById("userid").value="";
+                                stopProgress();
+                            }
+                        }
+                        else if(this.status==0&&this.readyState==4)
+                        {
+                            setAlert("ERROR");
+                            stopProgress();
+                        }
+                    };
+                
+                    http.open("POST", "https://souravsaha1234.000webhostapp.com/post-mail/forgatepassword.php", true);
+                    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                    http.send("uid="+uid);
+                }
+                else{
+                    setAlert("Please Enter User Id");
+                }
+                
+            }
+
+            function createaccount()
+            {
+                //CREATE ACCOUNT
+                window.location.href="signup.html";
+            }
+
+        </script>
+    </body>
+</html>

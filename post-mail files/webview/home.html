@@ -1,0 +1,418 @@
+<html>
+    <head>
+        <title>post-mail</title>
+        <link rel="stylesheet" href="https://souravsaha1234.000webhostapp.com/removeadd/removeadd.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="icon" href="../icon_for.jpg">
+        <script src="./comoncode/blockcode.js"></script>
+        <link rel="stylesheet" href="./comoncode/alertstyle.css">
+        <script src="./comoncode/alertstyle.js"></script>
+        <link rel="stylesheet" href="./comoncode/progress.css">
+        <script src="./comoncode/progress.js"></script>
+        <style>
+            .sidenav {
+                height: 100%;
+                width: 0;
+                position: fixed;
+                z-index: 2;
+                top: 0;
+                left: 0;
+                background-color: #ffffff;
+                overflow-x: hidden;
+                transition: 1s;
+                padding-top: 60px;
+                border: solid;
+                border-color: #b7bbc4;
+            }
+
+            .sidenav a {
+                cursor: pointer;
+                padding: 8px 8px 8px 32px;
+                text-decoration: none;
+                font-size: 25px;
+                color: #818181;
+                display: block;
+                transition: 0.3s;
+            }
+
+            .sidenav a:hover {
+                color: #f1f1f1;
+            }
+
+            .sidenav .closebtn {
+                position: absolute;
+                top: 0;
+                right: 25px;
+                font-size: 36px;
+                margin-left: 50px;
+            }
+            .bar_style
+            {
+                background-color: #ff7701;
+                position:fixed;
+                z-index: 1;
+                width: 100%;
+            }
+
+            .box{
+                color: red;
+                position: relative;
+                min-height: 400px;
+                padding-bottom: 30px; /* to avoid content overlapping */
+                font-size: 50px;
+            }
+            .box .content{    
+                position: absolute;
+                bottom: 0;
+                left: 100;
+            }
+            .drwholder
+            {
+                position: relative;
+                width: 100%;
+                height: 200px;
+                background-color: #ff7701;
+                bottom: 8%;
+            }
+
+            /* HOLDING TO LISTS */
+            .holder{
+                position:absolute;
+                width: 98%;
+                top: 150px;
+            }
+            .lists
+            {
+                position: relative;
+                width: 100%;
+                height: 150px;
+                background-color: rgba(240,232,221,255);
+                border: solid;
+                border-color: black;
+                border-radius: 20px;
+            }
+            .listsimg
+            {
+                position: relative;
+                width: 80px;
+                height: 80px;
+                left: 10px;
+            }
+            #listuser
+            {
+                position: relative;
+                font-size: 20px;
+                height: 20px;
+                width: max-content;
+                left: 7%;
+                top: 5px;
+                font-weight: bold;
+            }
+            #listsubj
+            {
+                position: relative;
+                height: max-content;
+                width: max-content;
+                left: 7%;
+                color: #33353c;
+            }
+            #listdateandtime
+            {
+                position: relative;
+                bottom: 20px;
+                width: max-content;
+                height: max-content;
+                left: 89%;
+                color: black;
+            }
+            #listseen
+            {
+                position: relative;
+                left: 89%;
+                width: max-content;
+                height: max-content;
+                font-size: 20px;
+                color: green;
+            }
+            .floating
+            {
+                position:fixed;
+                z-index: 5;
+                width: max-content;
+                height: max-content;
+                left: 90%;
+                top: 85%;
+                background-color: #f0e8dd;
+                border: solid;
+                border-color: #b57c8b;
+                padding: 10px;
+                border-radius: 50%;
+                cursor: pointer;
+            }
+            #del
+            {
+                position: relative;
+                left: 50%;
+                width: max-content;
+                padding: 10px;
+                border-radius: 5px;
+                background-color: #c9c8d4;
+                cursor: pointer;
+                bottom: 50%;
+            }
+
+        </style>
+    </head>
+    <body onload="getCook()">
+
+        <!--PROGRESS-->
+        <div id="progress">
+            <font id="title"></font>
+            <img src="./comoncode/loading_icon.png" id="imgicon" style="position: relative; top: 70px;" width="40" height="40">
+            <font id="mytext"></font>
+        </div>
+        <!--END PROGRESS-->
+
+        <!--ALERT-->
+        <div id="alertStyle">
+            <font id="text" style="font-size: 20px; color: red;"></font>
+        </div>
+        <!--END ALEERT-->
+        
+        <div id="mySidenav" class="sidenav">
+            <div class="drwholder">
+                <div href="javascript:void(0)" style="cursor:pointer;" class="closebtn" onclick="closeNav()">&times;</div>
+                <img src="../icon_for.jpg" style="position: relative; left: 20px; top: 20px;" width="70" height="70">
+                <br><br><br>
+                <font style="position:relative; left: 20px; font-size: 30px;">post-mail</font>
+                <br><br>
+                <font style="position:relative; left: 20px; color: #CED3DF; font-size: 25px;" id="show_userid"></font>
+            </div>
+            
+            <a style="color: black;" onclick="rcv()">Receive</a>
+            <a style="color: black;" onclick="snd()">Sended</a>
+            <a style="color: black;" onclick="fp()">Change Password</a>
+            <a style="color: black;" onclick="logout()">Logout</a>
+            
+          </div>
+          <div class="bar_style">
+            <span style="font-size:60px;cursor:pointer; color: white;" onclick="openNav()">&#9777; Home</span>
+          </div>
+        <br>
+        <font id="cata" style="position:absolute; top: 100px; left: 45%; font-size: 30px;">Receive</font>
+        <br><br>
+        <div class="holder" id="holder_list">
+            <!--SHOW ALL LISTS-->
+            
+        </div>
+        <div class="floating" onclick="sendmail()">
+            <!--FLOATING BUTTON-->
+            &nbsp;
+            <i class="material-icons" style="font-size:48px;color:#28a8df">send</i>
+        </div>
+        <script>
+            var userId="";
+            var cata="inbox";
+            function getCook()
+            {
+                var name="post-mail-userid=";
+                var dc=decodeURIComponent(document.cookie);
+                var co=dc.split(";");
+                var can=0;
+                for(var i=0;i<co.length;i++)
+                {
+                    var c=co[i];
+                    while(c.charAt(0)==' ')
+                    {
+                        c=c.substring(1);
+                    }
+                    if(c.indexOf(name)==0)
+                    {
+                        var cok=c.substring(name.length,c.length);
+                        if(cok=="system_stop")                      //FOR LOGOUT COMMAND
+                        {
+                            window.location.href="./login.html";
+                        }
+                        else
+                        {
+                            //GET DATAS
+                            userId=cok;
+                            document.getElementById("show_userid").innerHTML=userId;
+                            getDataFromServer();
+                            
+                        }
+                    }
+                    else{
+                        can++;
+                    }
+                }
+
+                if(co.length==can)
+                {
+                    window.location.href="./login.html";
+                }
+            }
+
+            function rcv()
+            {
+                cata="inbox";
+                document.getElementById("cata").innerHTML="Receive";
+                getDataFromServer();
+                closeNav();
+            }
+
+            function snd()
+            {
+                cata="outbox";
+                document.getElementById("cata").innerHTML="Sended";
+                getDataFromServer();
+                closeNav();
+            }
+
+            function getDataFromServer()
+            {
+                var holder=document.getElementById("holder_list");
+                holder.innerHTML="";
+                var http=new XMLHttpRequest();
+                http.onreadystatechange=function()
+                {
+                    if(this.status==200&&this.readyState==4)
+                    {
+                        var data=String(this.responseText).trim().split("`");
+                        for(var i=0;i<data.length-1;i=i+6)
+                        {
+                            setView(data[i],data[i+1],data[i+2],data[i+3],data[i+4],data[i+5]);
+                        }
+                    }
+                    else if(this.status==0&&this.readyState==4)
+                    {
+                        setAlert("Error Nwetwork");
+                    }
+                };
+                http.open("POST", "https://souravsaha1234.000webhostapp.com/post-mail/fetch.php", true);
+                http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                http.send("val="+cata+"&idv="+userId);
+            }
+            
+            function setView(msgid,user,sub,date,seend,time)                        //1 MEAN SEEN DONE 0 MEAN NOT SEEN
+            {
+                var ctrl=true;
+                var holder=document.getElementById("holder_list");
+                var list=document.createElement("div");
+                list.classList.add("lists");
+                var showuser=document.createElement("div");
+                showuser.id="listuser";
+                showuser.innerHTML=user;
+                list.appendChild(showuser);
+                var showseen=document.createElement("div");
+                showseen.id="listseen";
+                if(seend=="0")
+                {
+                    showseen.innerHTML="New";
+                    list.appendChild(showseen);
+                }
+                var img=document.createElement("img");
+                img.src="../icon_for.jpg";
+                img.classList.add("listsimg");
+                list.appendChild(img);
+                var subj=document.createElement("div");
+                subj.id="listsubj";
+                subj.innerHTML=sub;
+                list.appendChild(subj);
+                list.addEventListener("contextmenu",function(event)                                  //RIGHT CLICK
+                {
+                    event.preventDefault();
+
+                    ctrl=false;
+                    var del=document.createElement("div");
+                    del.innerHTML="Delete";
+                    del.id="del";
+                    del.addEventListener("click",function(){
+                        del.style.visibility="hidden";
+                        setProgress("Deleting","Please Wait...");
+                        var http=new XMLHttpRequest();
+                        http.onreadystatechange=function()
+                        {
+                            if(this.status==200&&this.readyState==4)
+                            {
+                                stopProgress();
+                                setAlert("Deleted!");
+                                getDataFromServer();
+                            }
+                            else if(this.status==0&&this.readyState==4)
+                            {
+                                stopProgress();
+                                setAlert("Error");
+                            }
+                        };
+                        http.open("POST", "https://souravsaha1234.000webhostapp.com/post-mail/imgs/delete_msg.php", true);
+                        http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                        http.send("msgid="+msgid+"&user_id="+userId);
+                        });
+                        list.appendChild(del);
+                    });
+                var datetime=document.createElement("div");
+                datetime.id="listdateandtime";
+                datetime.innerHTML=date+" "+time;
+                list.appendChild(datetime);
+                var iddata = document.createElement("input");
+                iddata.setAttribute("type", "hidden");
+                iddata.value=msgid;
+                list.appendChild(iddata);
+                var br=document.createElement("br");
+                list.addEventListener("click",function()                                  //GET OLD MSG
+                {
+                    if(ctrl)
+                    {
+                        localStorage.setItem("msgid", msgid);
+                        localStorage.setItem("cata",cata);
+                        localStorage.setItem("seen",seend);
+                        localStorage.setItem("mode","forward");
+                        localStorage.setItem("userid",userId);
+                        showseen.innerHTML="";
+                        window.open("./msgpage.html","_blank");
+                    }
+                    else{
+                        ctrl=true;
+                    }
+                });
+                
+                holder.appendChild(list);
+                holder.appendChild(br);
+                
+            }
+
+            function openNav() {
+                document.getElementById("mySidenav").style.width = "250px";
+            }
+
+            function closeNav() {
+                document.getElementById("mySidenav").style.width = "0";
+            }
+
+            function logout()
+            {
+                closeNav();
+                var d=new Date();
+                d.setTime(d.getTime()+(24*60*60*1000));
+                document.cookie="post-mail-userid="+"system_stop"+"; expires="+d.toGMTString()+"; path=/";
+                window.location.href="./index.html";
+            }
+            function sendmail()
+            {
+                localStorage.setItem("msgid", "0");                    //SEND NEW MSG
+                localStorage.setItem("cata",cata);
+                localStorage.setItem("seen","0");
+                localStorage.setItem("mode","send");
+                localStorage.setItem("userid",userId);
+                window.open("./msgpage.html","_blank");
+            }
+
+            function fp()
+            {
+                localStorage.setItem("uid", userId);
+                window.location.href="./forgatepassword.html";
+            }
+        </script>
+    </body>
+</html>

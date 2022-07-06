@@ -1,0 +1,84 @@
+<html>
+    <head>
+        <title>post-mail</title>
+        <link rel="icon" href="../icon_for.jpg">
+        <script src="./comoncode/blockcode.js"></script>
+        <style>
+            body{
+                background-color: #ecdfaa;
+            }
+            .container
+            {
+                position:absolute;
+                top: 200px;
+                left: 40%;
+                width: max-content;
+            }
+            .font_style
+            {
+                color: black;
+                font-size: 80px;
+                position: relative;
+            }
+            .header
+            {
+                position:fixed;
+                width: 100%;
+                height: 80px;
+                background-color: #ff7701;
+            }
+        </style>
+    </head>
+    <body onload="flash()">
+        <div class="header">
+
+        </div>
+        <div class="container">
+            <img style="position: relative; left: 10%;" src="../icon_for.jpg" width="250" height="150">
+            <br>
+            <font class="font_style">Post-Mail</font>
+        </div>
+        <script>
+            function flash()
+            {
+                var ti;
+                ti=setInterval(function()
+                {
+                    clearInterval(ti);
+                    var name="post-mail-userid=";
+                    var dc=decodeURIComponent(document.cookie);
+                    var co=dc.split(";");
+                    var can=0;
+                    for(var i=0;i<co.length;i++)
+                    {
+                        var c=co[i];
+                        while(c.charAt(0)==' ')
+                        {
+                            c=c.substring(1);
+                        }
+                        if(c.indexOf(name)==0)
+                        {
+                            var cok=c.substring(name.length,c.length);
+                            if(cok=="system_stop")                      //FOR LOGOUT COMMAND
+                            {
+                                window.location.href="./login.html";
+                            }
+                            else
+                            {
+                                window.location.href="./home.html";
+                            }
+                        }
+                        else{
+                            can++;
+                        }
+                    }
+
+                    if(co.length==can)
+                    {
+                        window.location.href="./login.html";
+                    }
+                },1000);
+            }
+        </script>
+    </body>
+</html>

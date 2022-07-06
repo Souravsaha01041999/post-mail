@@ -1,0 +1,234 @@
+<html>
+    <head>
+        <title>post-mail</title>
+        <link rel="stylesheet" href="https://souravsaha1234.000webhostapp.com/removeadd/removeadd.css">
+        <link rel="icon" href="../icon_for.jpg">
+        <script src="./comoncode/blockcode.js"></script>
+        <script src="./comoncode/progress.js"></script>
+        <link rel="stylesheet" href="./comoncode/progress.css">
+        <link rel="stylesheet" href="./comoncode/alertstyle.css">
+        <script src="./comoncode/alertstyle.js"></script>
+        <style>
+            .header
+            {
+                background-color: #ff7701;
+                width: 100%;
+                position: fixed;
+                height: 40px;
+            }
+            .image-upload>input {
+                display: none;
+            }
+            .image-upload{
+                position:absolute;
+                top: 50px;
+            }
+            .textStyle
+            {
+                border: solid;
+                border-color: #ff7701;
+                border-radius: 20px;
+                width: 100%;
+            }
+            .btn
+            {
+                position: relative;
+                width: 100%;
+                font-size: 30px;
+                color: white;
+                background-color: #018577;
+                border: solid;
+                border-color: #018577;
+            }
+            #im
+             {
+                visibility: hidden;
+                cursor: pointer;
+             }
+        </style>
+    </head>
+    <body onload="test()">
+
+        <!--PROGRESS-->
+        <div id="progress">
+            <font id="title"></font>
+            <img src="./comoncode/loading_icon.png" id="imgicon" style="position: relative; top: 70px;" width="40" height="40">
+            <font id="mytext"></font>
+        </div>
+        <!--END PROGRESS-->
+        <!--ALERT-->
+        <div id="alertStyle">
+            <font id="text" style="font-size: 20px; color: red;"></font>
+        </div>
+        <!--END ALEERT-->
+
+        <div class="header"></div>
+
+        <div class="image-upload">
+            <label for="file_input">
+              <img src="./cameraIcon.jpg" width="45" height="40">
+            </label>
+          
+            <input id="file_input" name="file_input" type="file" accept="image/*">
+          </div>
+
+          <img id="down" src="./downloadImage.jpg" style="position: absolute; top: 50px; left: 80%; width: 40px; height: 40px; visibility: hidden;" onclick="downloadimg()">
+          <div style="position:absolute; left: 85%; top: 50px; width: 70px; height: 70px;">
+            <img src="" id="im" width="100%" height="100%" onclick="openimg(this)">
+          </div>
+          <div style="position: absolute; top: 100px; width: 97%;">
+              <div>
+                  <input type="text" placeholder="User Id" class="textStyle" id="uid">
+              </div>
+              <br>
+              <div>
+                  <input type="text" placeholder="Subject" class="textStyle" id="subj">
+              </div>
+              <br>
+              <div>
+                  <textarea placeholder="Body" rows="30" class="textStyle" id="bdy"></textarea>
+              </div>
+              <br>
+              <div>
+                  <button id="sndBtn" onclick="sendmsg()" class="btn"></button>
+              </div>
+          </div>
+
+
+        <script>
+            var mode,msgId,cata,seen,userId;
+            function test()
+            {
+                msgId=localStorage.getItem("msgid");
+                cata=localStorage.getItem("cata");
+                seen=localStorage.getItem("seen");
+                mode=localStorage.getItem("mode");
+                userId=localStorage.getItem("userid");
+
+                localStorage.clear();
+                if(mode!=null)
+                {
+                    //IF MODE SEND THEN SEND NEW MSG IF MODE FOWARD THEN FRD THE MSG AND GET THE MSG
+                    if(mode=="send")
+                    {
+                        document.getElementById("sndBtn").innerHTML="SEND";
+                    }
+                    else{
+                        document.getElementById("sndBtn").innerHTML="FORWARD";
+                           //GET THE DATA OF MSG
+                           setProgress("Loading","Please wait...");
+                        var http=new XMLHttpRequest();
+                http.onreadystatechange=function()
+                {
+                    if(this.status==200&&this.readyState==4)
+                    {
+                        stopProgress();
+                        var data=String(this.responseText).split("`");
+                       document.getElementById("uid").value=data[0];
+                        document.getElementById("subj").value=data[1];
+                          document.getElementById("bdy").value=data[2];
+                         if(data[3]!="none")
+                         {
+                            var img=document.getElementById("im");
+                            img.style.visibility = "visible";
+                            document.getElementById("down").style.visibility = "visible";
+                            img.src=data[3];
+                                   
+                         }
+                    }
+                    else if(this.status==0&&this.readyState==4)
+                    {
+                        setAlert("Error Network");
+                        stopProgress();
+                    }
+                };
+                http.open("POST", "https://souravsaha1234.000webhostapp.com/post-mail/fetch_total_msg.php", true);
+                http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                http.send("msgid="+msgId+"&cata="+cata+"&seen="+seen);
+                    }
+                }
+                else{
+                    window.location.href="./home.html";
+                }
+            }
+
+            function sendmsg()
+            {
+                var uid=document.getElementById("uid").value;
+                var subject=document.getElementById("subj").value;
+                var text=document.getElementById("bdy").value;
+                
+               var d = new Date();
+               var day = d.getDate()+"/"+d.getMonth()+"/"+d.getFullYear();
+               var time = String(d.getHours()) + ":" + String(d.getMinutes());
+               setProgress("Sending","Please Wait...");
+               if(uid.length>0&& subject.length>0&&text.length>0)
+               {
+                      if(document.getElementById("file_input").files.length>0)
+                      {
+                            //CALL FILE UPLOAD API
+                            uploadFile(uid,subject,text);
+                      }
+                      else
+                      {
+                            //CALL NORMAL SENDING MAIL API
+                            var http=new XMLHttpRequest();
+                            http.onreadystatechange=function()
+                            {
+                                
+                                if(this.status==200&&this.readyState==4)
+                                {
+                                    setAlert(this.responseText);
+                                    stopProgress();
+                                }
+                                else if(this.status==0&&this.readyState==4)
+                                {
+                                    setAlert("Error Network");
+                                    stopProgress();
+                                }
+                            };
+                            http.open("POST", "https://souravsaha1234.000webhostapp.com/post-mail/sendmail.php", true);
+                            http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                            http.send("toval="+uid+"&frmval="+userId+"&msgval="+text+"&dateval="+day+"&subval="+subject+"&timeval="+time);
+                      }
+               }
+               else{
+                     setAlert("Please Enter All Data");
+                     stopProgress();
+               }
+           }
+            function openimg(im)
+            {
+                 window.open(im.src,"_blank")
+            }
+            function downloadimg()
+            {
+                var link=document.getElementById("im").src;
+                var a = document.createElement("a");
+                a.href = link;
+                a.setAttribute("download",link.split("/")[link.split("/").length-1]);
+                a.click();
+            }
+            async function uploadFile(uid,subj,text) {
+                var formData = new FormData(); 
+                var d = new Date();
+                var day = d.getDate()+"/"+d.getMonth()+"/"+d.getFullYear();
+                var time = String(d.getHours()) + ":" + String(d.getMinutes());
+
+                formData.append("file", file_input.files[0]);
+                formData.append("toval",uid);
+                formData.append("frmval",userId);
+                formData.append("msgval",text);
+                formData.append("dateval",day);
+                formData.append("subval",subj);
+                formData.append("timeval",time);
+                await fetch('https://souravsaha1234.000webhostapp.com/post-mail/imgs/sendimmail.php', {
+                    method: "POST", 
+                    body: formData
+                }); 
+                setAlert("The file has been uploaded successfully.");
+                stopProgress();
+            }
+    </script>
+    </body>
+</html>
